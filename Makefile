@@ -3,7 +3,7 @@ COMMIT=$(shell git rev-parse HEAD)
 SIGN_KEY=B76D61FAA6DB759466E83D9964B9C6AAE2D55278
 BINARY_NAME=statping
 GOBUILD=go build -a
-GOVERSION=1.17.8
+GOVERSION=1.17.7
 NODE_VERSION=16.14.0
 XGO=xgo -go $(GOVERSION) --dest=build
 BUILDVERSION=-ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT}"
@@ -37,16 +37,16 @@ lint:
 	goimports ./...
 
 up:
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml up -d --remove-orphans
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml up -d --remove-orphans
 	make print_details
 
 down:
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml down --volumes --remove-orphans
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml down --volumes --remove-orphans
 
 lite: clean
 	docker build -t statping-ng/statping-ng:dev -f dev/Dockerfile.dev .
-	docker compose -f dev/docker compose.lite.yml down
-	docker compose -f dev/docker compose.lite.yml up --remove-orphans
+	docker compose -f dev/docker-compose.lite.yml down
+	docker compose -f dev/docker-compose.lite.yml up --remove-orphans
 
 reup: down clean compose-build-full up
 
@@ -94,37 +94,37 @@ go-run:
 	go run ./cmd
 
 start:
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml start
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml start
 
 stop:
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml stop
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml stop
 
 logs:
 	docker logs statping --follow
 
 db-up:
-	docker compose -f dev/docker compose.db.yml up -d --remove-orphans
+	docker compose -f dev/docker-compose.db.yml up -d --remove-orphans
 
 db-down:
-	docker compose -f dev/docker compose.db.yml down --volumes --remove-orphans
+	docker compose -f dev/docker-compose.db.yml down --volumes --remove-orphans
 
 console:
 	docker exec -t -i statping /bin/sh
 
 compose-build-full: 
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml build --parallel --build-arg VERSION=${VERSION}
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml build --parallel --build-arg VERSION=${VERSION}
 
 docker-latest: 
 	docker build -t statping-ng/statping-ng:latest --build-arg VERSION=${VERSION} .
 
 docker-test:
-	docker compose -f docker compose.test.yml up --remove-orphans
+	docker compose -f docker-compose.test.yml up --remove-orphans
 
 modd:
 	modd -f ./dev/modd.conf
 
 top:
-	docker compose -f docker compose.yml -f dev/docker compose.full.yml top
+	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml top
 
 frontend-build:
 	@echo "Removing old frontend distributions..."
