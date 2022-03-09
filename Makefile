@@ -72,7 +72,6 @@ test-api:
 
 test-deps:
 	go get golang.org/x/tools/cmd/cover
-	go get github.com/mattn/goveralls
 	go get github.com/GeertJohan/go.rice/rice
 	go get github.com/mattn/go-sqlite3
 	go install github.com/mattn/go-sqlite3
