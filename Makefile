@@ -71,9 +71,12 @@ test-api:
 	sleep 5000 && newman run dev/postman.json -e dev/postman_environment.json --delay-request 500
 
 test-deps:
-	go get -u golang.org/x/tools/cmd/cover
-	go get -u github.com/GeertJohan/go.rice/rice
-	go get -u github.com/mattn/go-sqlite3
+	go get golang.org/x/tools/cmd/cover
+	go get github.com/mattn/goveralls
+	go get github.com/GeertJohan/go.rice/rice
+	go get github.com/mattn/go-sqlite3
+	go install github.com/mattn/go-sqlite3
+	go install github.com/wellington/go-libsass
 
 deps:
 	go get -d -v -t ./...
