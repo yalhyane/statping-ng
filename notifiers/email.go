@@ -3,6 +3,7 @@ package notifiers
 import (
 	"crypto/tls"
 	"fmt"
+	"strconv"
 
 	"github.com/go-mail/mail"
 	"github.com/statping-ng/emails"
@@ -70,13 +71,15 @@ var email = &emailer{&notifications.Notification{
 		Title:       "Send Alerts To",
 		Placeholder: "sendto@email.com",
 		DbField:     "Var2",
-	}, {
-		Type:        "switch",
-		Title:       "Disable TLS/SSL",
-		Placeholder: "",
-		SmallText:   "Enabling this will set Insecure Skip Verify to true",
-		DbField:     "api_key",
-	}}},
+	},
+		{
+			Type:        "list",
+			Title:       "TLS/SSL",
+			Placeholder: "TLS/SSL",
+			SmallText:   "Enabling this will set Insecure Skip Verify to true",
+			DbField:     "api_key",
+			ListOptions: []string{"Enabled", "Disabled"},
+		}}},
 }
 
 type emailOutgoing struct {
@@ -153,16 +156,18 @@ func (e *emailer) OnSave() (string, error) {
 }
 
 func (e *emailer) dialSend(email *emailOutgoing) error {
+	log.Debugln("Email DialSend: " + e.Host.String + ":" + strconv.Itoa(int(e.Port.Int64)) + ", SSL: " + e.ApiKey.String + ", Username: " + e.Username.String + "/" + e.Password.String)
+
 	mailer = mail.NewDialer(e.Host.String, int(e.Port.Int64), e.Username.String, e.Password.String)
 	m := mail.NewMessage()
 	// if email setting TLS is Disabled
-	if e.ApiKey.String == "true" {
+	if e.ApiKey.String == "Disabled" {
 		mailer.SSL = false
 	} else {
 		mailer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
-	m.SetAddressHeader("From", email.From, "Statping")
+	m.SetAddressHeader("From", email.From, core.App.Name)
 	m.SetHeader("To", email.To)
 	m.SetHeader("Subject", email.Subject)
 	m.SetBody("text/html", email.Template)

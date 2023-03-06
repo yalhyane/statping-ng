@@ -1,7 +1,9 @@
 <template>
     <div class="container col-md-7 col-sm-12 sm-container">
 
+      <SubscriptionBlock v-if="allowSubscribers" />
       <Header/>
+
 
       <div v-if="!loaded" class="row mt-5 mb-5">
         <div class="col-12 mt-5 mb-2 text-center">
@@ -47,6 +49,7 @@ const MessageBlock = () => import(/* webpackChunkName: "index" */ '@/components/
 const ServiceBlock = () => import(/* webpackChunkName: "index" */ '@/components/Service/ServiceBlock')
 const GroupServiceFailures = () => import(/* webpackChunkName: "index" */ '@/components/Index/GroupServiceFailures')
 const IncidentsBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/IncidentsBlock')
+const SubscriptionBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/SubscriptionBlock')
 
 export default {
     name: 'Index',
@@ -56,7 +59,8 @@ export default {
       ServiceBlock,
       MessageBlock,
       Group,
-      Header
+      Header,
+      SubscriptionBlock,
     },
     data() {
         return {
@@ -64,6 +68,13 @@ export default {
         }
     },
     computed: {
+      allowSubscribers () {
+        const config = this.$store.getters.getSiteConfig
+        if (config !== null) {
+          return config.allowSubscribers
+        }
+        return false
+      },
       loading_text() {
         if (this.$store.getters.groups.length === 0) {
           return "Loading Groups"

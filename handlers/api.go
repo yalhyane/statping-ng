@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/statping-ng/statping-ng/notifiers"
 	"github.com/statping-ng/statping-ng/types/checkins"
 	"github.com/statping-ng/statping-ng/types/configs"
 	"github.com/statping-ng/statping-ng/types/core"
@@ -12,6 +13,7 @@ import (
 	"github.com/statping-ng/statping-ng/types/notifications"
 	"github.com/statping-ng/statping-ng/types/null"
 	"github.com/statping-ng/statping-ng/types/services"
+	"github.com/statping-ng/statping-ng/types/subscriptions"
 	"github.com/statping-ng/statping-ng/types/users"
 	"github.com/statping-ng/statping-ng/utils"
 	"net/http"
@@ -110,6 +112,25 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	returnJson(core.App, w, r)
 }
 
+func apiSiteConfig(w http.ResponseWriter, r *http.Request) {
+	app := core.App
+	n := services.FindNotifier(notifiers.EmailSubscriber.Method)
+	siteConfig := &siteConfig{
+		Name:             app.Name,
+		Description:      app.Description,
+		Language:         app.Language,
+		AllowSubscribers: n.Enabled.Bool,
+	}
+
+	returnJson(siteConfig, w, r)
+}
+
+type siteConfig struct {
+	Name             string `json:"name"`
+	Description      string `json:"description"`
+	Language         string `json:"language"`
+	AllowSubscribers bool   `json:"allowSubscribers"`
+}
 type cacheJson struct {
 	URL        string    `json:"url"`
 	Expiration time.Time `json:"expiration"`
@@ -162,6 +183,9 @@ func sendJsonAction(obj interface{}, method string, w http.ResponseWriter, r *ht
 		objId = v.Id
 	case *incidents.IncidentUpdate:
 		objName = "incident_update"
+		objId = v.Id
+	case *subscriptions.Subscription:
+		objName = "subscription"
 		objId = v.Id
 	default:
 		objName = fmt.Sprintf("%T", v)

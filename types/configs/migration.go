@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/statping-ng/statping-ng/source"
 	"github.com/statping-ng/statping-ng/types/notifications"
+	"github.com/statping-ng/statping-ng/types/subscriptions"
 	"github.com/statping-ng/statping-ng/utils"
 
 	"github.com/statping-ng/statping-ng/types/checkins"
@@ -100,11 +101,11 @@ func (d *DbConfig) BackupAssets() error {
 	return nil
 }
 
-//MigrateDatabase will migrate the database structure to current version.
-//This function will NOT remove previous records, tables or columns from the database.
-//If this function has an issue, it will ROLLBACK to the previous state.
+// MigrateDatabase will migrate the database structure to current version.
+// This function will NOT remove previous records, tables or columns from the database.
+// If this function has an issue, it will ROLLBACK to the previous state.
 func (d *DbConfig) MigrateDatabase() error {
-	var DbModels = []interface{}{&services.Service{}, &users.User{}, &hits.Hit{}, &failures.Failure{}, &messages.Message{}, &groups.Group{}, &checkins.Checkin{}, &checkins.CheckinHit{}, &notifications.Notification{}, &incidents.Incident{}, &incidents.IncidentUpdate{}}
+	var DbModels = []interface{}{&services.Service{}, &users.User{}, &hits.Hit{}, &failures.Failure{}, &messages.Message{}, &groups.Group{}, &checkins.Checkin{}, &checkins.CheckinHit{}, &notifications.Notification{}, &incidents.Incident{}, &incidents.IncidentUpdate{}, &subscriptions.Subscription{}}
 
 	log.Infoln("Migrating Database Tables...")
 	tx := d.Db.Begin()

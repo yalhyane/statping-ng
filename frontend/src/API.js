@@ -228,6 +228,12 @@ class Api {
     return axios.post('api/settings/import', data).then(response => (response.data))
   }
 
+    async subscription_save(email) {
+      return axios.post('api/subscriptions', {
+          email
+      })
+    }
+
   async check_token(token) {
     const f = {token: token}
     return axios.post('api/users/token', qs.stringify(f)).then(response => (response.data))
@@ -256,6 +262,10 @@ class Api {
   async configs() {
     return axios.get('api/settings/configs').then(response => (response.data)) || []
   }
+
+    async site_configs() {
+        return axios.get('api/configs').then(response => (response.data)) || []
+    }
 
   async configs_save(data) {
     return axios.post('api/settings/configs', data).then(response => (response.data)) || []

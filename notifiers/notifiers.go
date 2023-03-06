@@ -38,6 +38,7 @@ func InitNotifiers() {
 		Pushover,
 		Gotify,
 		AmazonSNS,
+		EmailSubscriber,
 	)
 
 	services.UpdateNotifiers()

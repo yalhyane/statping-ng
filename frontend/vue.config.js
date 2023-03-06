@@ -13,7 +13,7 @@ module.exports = {
         target: 'http://0.0.0.0:8585',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/api': '/api'
         }
       },
       '/oauth': {
@@ -21,7 +21,7 @@ module.exports = {
         target: 'http://0.0.0.0:8585',
         changeOrigin: true,
         pathRewrite: {
-          '^/oauth': ''
+          '^/oauth': '/oauth'
         }
       }
     }

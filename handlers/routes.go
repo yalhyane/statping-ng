@@ -96,6 +96,7 @@ func Router() *mux.Router {
 	api.Handle("/api/settings/export", authenticated(settingsExportHandler, false)).Methods("GET")
 	api.Handle("/api/settings/configs", authenticated(configsViewHandler, false)).Methods("GET")
 	api.Handle("/api/settings/configs", authenticated(configsSaveHandler, false)).Methods("POST")
+	api.Handle("/api/configs", http.HandlerFunc(apiSiteConfig)).Methods("GET")
 
 	// API OAUTH Routes
 	api.Handle("/api/oauth", scoped(apiOAuthHandler)).Methods("GET")
@@ -173,6 +174,10 @@ func Router() *mux.Router {
 	api.Handle("/api/checkins/{api}", authenticated(apiCheckinHandler, false)).Methods("GET")
 	api.Handle("/api/checkins/{api}", authenticated(checkinDeleteHandler, false)).Methods("DELETE")
 	r.Handle("/checkin/{api}", http.HandlerFunc(checkinHitHandler))
+
+	// API SUBSCRIPTIONS Routes
+	api.Handle("/api/subscriptions", scoped(apiAllSubscriptionHandler)).Methods("GET")
+	api.Handle("/api/subscriptions", http.HandlerFunc(apiCreateSubscriptionHandler)).Methods("POST")
 
 	// API Generic Routes
 	r.Handle("/metrics", readOnly(promhttp.Handler(), false))

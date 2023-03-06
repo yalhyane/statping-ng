@@ -34,6 +34,7 @@
         this.$router.push('/setup')
       }
       if (this.$route.path !== '/setup') {
+        this.$store.dispatch('loadSiteConfig')
         if (this.$store.state.admin) {
           await this.$store.dispatch('loadAdmin')
         } else {

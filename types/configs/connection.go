@@ -15,6 +15,7 @@ import (
 	"github.com/statping-ng/statping-ng/types/notifications"
 	"github.com/statping-ng/statping-ng/types/null"
 	"github.com/statping-ng/statping-ng/types/services"
+	"github.com/statping-ng/statping-ng/types/subscriptions"
 	"github.com/statping-ng/statping-ng/types/users"
 	"github.com/statping-ng/statping-ng/utils"
 	"time"
@@ -32,6 +33,7 @@ func initModels(db database.Database) {
 	users.SetDB(db)
 	messages.SetDB(db)
 	groups.SetDB(db)
+	subscriptions.SetDB(db)
 }
 
 // Connect will attempt to connect to the sqlite, postgres, or mysql database

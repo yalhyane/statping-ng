@@ -6,10 +6,10 @@ package utils
 import (
 	"errors"
 	"os"
-	"os/exec"
-	"regexp"
-	"strconv"
-	"strings"
+	_ "os/exec"
+	_ "regexp"
+	_ "strconv"
+	_ "strings"
 	"syscall"
 )
 

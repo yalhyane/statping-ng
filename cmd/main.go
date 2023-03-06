@@ -11,6 +11,7 @@ import (
 	"github.com/statping-ng/statping-ng/types/core"
 	"github.com/statping-ng/statping-ng/types/metrics"
 	"github.com/statping-ng/statping-ng/types/services"
+	"github.com/statping-ng/statping-ng/types/subscriptions"
 	"github.com/statping-ng/statping-ng/utils"
 	"os"
 	"os/signal"
@@ -154,6 +155,12 @@ func InitApp() error {
 	metrics.InitMetrics()
 	// connect each notifier, added them into database if needed
 	notifiers.InitNotifiers()
+
+	if n := services.FindNotifier(notifiers.EmailSubscriber.Method); n != nil && n.Enabled.Bool {
+		// init subscribers only if the notifier is active
+		_ = subscriptions.SelectAllSubscribers()
+	}
+
 	// select all services in database and store services in a mapping of Service pointers
 	if _, err := services.SelectAllServices(true); err != nil {
 		return err

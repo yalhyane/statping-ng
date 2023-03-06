@@ -39,7 +39,13 @@ export default new Vuex.Store({
       btnText: "Save Changes",
       btnColor: "btn-primary",
       func: null,
-    }
+    },
+    site_config: {
+        allowSubscribers: true,
+        description: null,
+        language: null,
+        name: null
+    },
   },
   getters: {
     hasAllData: state => state.hasAllData,
@@ -102,6 +108,7 @@ export default new Vuex.Store({
     messageById: (state) => (id) => {
       return state.messages.find(m => m.id === id)
     },
+      getSiteConfig: state => state.site_config,
   },
   mutations: {
     setHasAllData(state, bool) {
@@ -152,6 +159,9 @@ export default new Vuex.Store({
     setModal(state, modal) {
       state.modal = modal
     },
+    setSiteConfig(state, config) {
+      state.site_config = config;
+    },
   },
   actions: {
     async getAllServices(context) {
@@ -177,6 +187,10 @@ export default new Vuex.Store({
       context.commit("setOAuth", oauth);
       context.commit("setHasPublicData", true)
     },
+    async loadSiteConfig(context) {
+      const config = await Api.site_configs();
+      context.commit("setSiteConfig", config);
+    },
     async loadAdmin(context) {
       const groups = await Api.groups()
       context.commit("setGroups", groups);
@@ -195,4 +209,4 @@ export default new Vuex.Store({
       context.commit("setOAuth", oauth);
     }
   }
-});
+})

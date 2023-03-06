@@ -23,6 +23,13 @@ func New(err string) Error {
 	}
 }
 
+func NewWithCode(err string, code int) Error {
+	return &appError{
+		Err:  err,
+		Code: code,
+	}
+}
+
 func Err(err Error) Error {
 	return &appError{
 		Err:  err.Error(),

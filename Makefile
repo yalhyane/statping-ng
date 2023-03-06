@@ -111,10 +111,10 @@ db-down:
 console:
 	docker exec -t -i statping /bin/sh
 
-compose-build-full: 
+compose-build-full:
 	docker compose -f docker-compose.yml -f dev/docker-compose.full.yml build --parallel --build-arg VERSION=${VERSION}
 
-docker-latest: 
+docker-latest:
 	docker build -t statping-ng/statping-ng:latest --build-arg VERSION=${VERSION} .
 
 docker-test:
@@ -170,7 +170,7 @@ build-deps:
 	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi libsqlite3-dev gcc-mingw-w64 gcc-mingw-w64-x86-64
 
 build-darwin:
-	GO111MODULE="on" GOOS=darwin GOARCH=amd64 \
+	CGO_ENABLED=1 GO111MODULE="on" GOOS=darwin GOARCH=amd64 \
 		go build -a -ldflags "-s -w -X main.VERSION=${VERSION}" -o releases/statping-darwin-amd64/statping --tags "netgo darwin" ./cmd
 
 build-win:
